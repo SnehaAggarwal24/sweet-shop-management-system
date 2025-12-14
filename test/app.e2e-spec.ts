@@ -11,8 +11,10 @@ describe('Auth (e2e)', () => {
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+   app = moduleFixture.createNestApplication();
+app.setGlobalPrefix('api');
+await app.init();
+
   });
 
   afterAll(async () => {
