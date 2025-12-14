@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SweetsService } from './sweets.service';
 import { CreateSweetDto } from './dto/create-sweet.dto';
+import { HttpCode } from '@nestjs/common';
 
 @Controller('sweets')
 export class SweetsController {
@@ -31,4 +32,13 @@ async searchSweets(
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
   });
 }
+@UseGuards(AuthGuard('jwt'))
+@Post(':id/purchase')
+@HttpCode(200)
+async purchaseSweet(@Param('id') id: string) {
+  return this.sweetsService.purchase(Number(id));
+}
+
+
+
 }

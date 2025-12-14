@@ -145,5 +145,49 @@ it('should search sweets by name', async () => {
   expect(res.body.length).toBeGreaterThan(0);
   expect(res.body[0].name).toBe('Rasgulla');
 });
+it('should purchase a sweet and decrease quantity', async () => {
+  // Register user
+  await request(app.getHttpServer())
+    .post('/api/auth/register')
+    .send({
+      name: 'Buyer',
+      email: 'buyer@test.com',
+      password: 'password123',
+    })
+    .expect(201);
+
+  // Login
+  const loginRes = await request(app.getHttpServer())
+    .post('/api/auth/login')
+    .send({
+      email: 'buyer@test.com',
+      password: 'password123',
+    })
+    .expect(200);
+
+  const token = loginRes.body.access_token;
+
+  // Create sweet
+  const sweetRes = await request(app.getHttpServer())
+    .post('/api/sweets')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      name: 'Ladoo',
+      category: 'Indian',
+      price: 10,
+      quantity: 5,
+    })
+    .expect(201);
+
+  const sweetId = sweetRes.body.id;
+
+  // Purchase sweet
+  const purchaseRes = await request(app.getHttpServer())
+    .post(`/api/sweets/${sweetId}/purchase`)
+    .set('Authorization', `Bearer ${token}`)
+    .expect(200);
+
+  expect(purchaseRes.body.quantity).toBe(4);
+});
 
 });
