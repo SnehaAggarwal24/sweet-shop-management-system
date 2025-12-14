@@ -77,6 +77,19 @@ it('should not allow duplicate email registration', async () => {
       password: 'password123',
     })
     .expect(200);
+  
 });
+it('should not allow creating sweet without authentication', async () => {
+  return request(app.getHttpServer())
+    .post('/api/sweets')
+    .send({
+      name: 'Rasgulla',
+      category: 'Indian',
+      price: 20,
+      quantity: 50,
+    })
+    .expect(401);
+});
+
 
 });
