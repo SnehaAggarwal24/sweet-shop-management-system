@@ -18,8 +18,32 @@ export class SweetsService {
   );
   
   }
+  
   async findAll() {
   return this.prisma.sweet.findMany();
+}
+async search(query: {
+  name?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}) {
+  return this.prisma.sweet.findMany({
+    where: {
+      name: query.name
+        ? { contains: query.name }
+        : undefined,
+
+      category: query.category
+        ? { contains: query.category }
+        : undefined,
+
+      price: {
+        gte: query.minPrice,
+        lte: query.maxPrice,
+      },
+    },
+  });
 }
 
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SweetsService } from './sweets.service';
 import { CreateSweetDto } from './dto/create-sweet.dto';
@@ -17,4 +17,18 @@ export class SweetsController {
   async getAllSweets() {
     return this.sweetsService.findAll();
   }
+  @Get('search')
+async searchSweets(
+  @Query('name') name?: string,
+  @Query('category') category?: string,
+  @Query('minPrice') minPrice?: string,
+  @Query('maxPrice') maxPrice?: string,
+) {
+  return this.sweetsService.search({
+    name,
+    category,
+    minPrice: minPrice ? Number(minPrice) : undefined,
+    maxPrice: maxPrice ? Number(maxPrice) : undefined,
+  });
+}
 }

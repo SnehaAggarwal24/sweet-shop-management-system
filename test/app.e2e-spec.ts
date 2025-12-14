@@ -135,5 +135,15 @@ describe('Auth & Sweets (e2e)', () => {
 
   expect(Array.isArray(res.body)).toBe(true);
 });
+it('should search sweets by name', async () => {
+  const res = await request(app.getHttpServer())
+    .get('/api/sweets/search')
+    .query({ name: 'Rasgulla' })
+    .expect(200);
+
+  expect(Array.isArray(res.body)).toBe(true);
+  expect(res.body.length).toBeGreaterThan(0);
+  expect(res.body[0].name).toBe('Rasgulla');
+});
 
 });
