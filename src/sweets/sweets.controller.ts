@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SweetsService } from './sweets.service';
 import { CreateSweetDto } from './dto/create-sweet.dto';
@@ -11,5 +11,10 @@ export class SweetsController {
   @Post()
   async createSweet(@Body() dto: CreateSweetDto) {
     return this.sweetsService.create(dto);
+  }
+
+  @Get()
+  async getAllSweets() {
+    return this.sweetsService.findAll();
   }
 }

@@ -14,6 +14,12 @@ export class SweetsService {
         price: dto.price,
         quantity: dto.quantity,
       },
-    });
+    }
+  );
+  
   }
+  async findAll() {
+  return this.prisma.sweet.findMany();
+}
+
 }

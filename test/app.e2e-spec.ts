@@ -128,4 +128,12 @@ describe('Auth & Sweets (e2e)', () => {
         expect(res.body.name).toBe('Rasgulla'); // ✅ FIXED
       });
   });
+  it('should list all sweets', async () => {
+  const res = await request(app.getHttpServer())
+    .get('/api/sweets')
+    .expect(200);
+
+  expect(Array.isArray(res.body)).toBe(true);
+});
+
 });
