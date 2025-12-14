@@ -21,9 +21,11 @@ export class AuthService {
       
 
       return {
-        id: user.id,
-        email: user.email,
-      };
+  id: user.id,
+  name: user.name,
+  email: user.email,
+};
+
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
