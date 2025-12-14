@@ -18,6 +18,7 @@ export class AuthService {
           password: hashedPassword,
         },
       });
+      
 
       return {
         id: user.id,
@@ -33,4 +34,27 @@ export class AuthService {
       throw error;
     }
   }
+  async login(dto: { email: string; password: string }) {
+  const user = await this.prisma.user.findUnique({
+    where: { email: dto.email },
+  });
+
+  if (!user) {
+    throw new ConflictException('Invalid credentials');
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    dto.password,
+    user.password,
+  );
+
+  if (!isPasswordValid) {
+    throw new ConflictException('Invalid credentials');
+  }
+
+  return {
+    message: 'Login successful',
+  };
+}
+
 }

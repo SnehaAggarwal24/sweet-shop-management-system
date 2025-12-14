@@ -58,4 +58,25 @@ it('should not allow duplicate email registration', async () => {
       })
       .expect(201);
   });
+  it('should login an existing user', async () => {
+  // Register first
+  await request(app.getHttpServer())
+    .post('/api/auth/register')
+    .send({
+      name: 'Sneha',
+      email: 'login@test.com',
+      password: 'password123',
+    })
+    .expect(201);
+
+  // Login
+  return request(app.getHttpServer())
+    .post('/api/auth/login')
+    .send({
+      email: 'login@test.com',
+      password: 'password123',
+    })
+    .expect(200);
+});
+
 });
