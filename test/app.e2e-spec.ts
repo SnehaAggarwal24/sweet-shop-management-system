@@ -25,6 +25,28 @@ beforeAll(async () => {
   await prisma.$disconnect();
   await app.close();
 });
+it('should not allow duplicate email registration', async () => {
+  // First registration
+  await request(app.getHttpServer())
+    .post('/api/auth/register')
+    .send({
+      name: 'Sneha',
+      email: 'duplicate@test.com',
+      password: 'password123',
+    })
+    .expect(201);
+
+  // Second registration with same email
+  return request(app.getHttpServer())
+    .post('/api/auth/register')
+    .send({
+      name: 'Sneha Again',
+      email: 'duplicate@test.com',
+      password: 'password123',
+    })
+    .expect(409);
+});
+
 
   it('should register a new user', async () => {
     return request(app.getHttpServer())
