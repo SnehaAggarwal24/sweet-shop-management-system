@@ -2,11 +2,11 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { PrismaClient, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
-
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   private prisma = new PrismaClient();
-
+  constructor(private readonly jwtService: JwtService) {}
   async register(dto: RegisterDto) {
     try {
       const hashedPassword = await bcrypt.hash(dto.password, 10);
@@ -52,8 +52,12 @@ export class AuthService {
     throw new ConflictException('Invalid credentials');
   }
 
+  const payload = { sub: user.id, email: user.email };
+
+  const token = this.jwtService.sign(payload);
+
   return {
-    message: 'Login successful',
+    access_token: token,
   };
 }
 
